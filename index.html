@@ -1,10 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Моя первая веб-страница</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Token</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Добро пожаловать на мою первую веб-страницу!</h1>
-    <p>Это пример простого HTML-документа.</p>
+    <h1>Your Access Token</h1>
+    <textarea id="token" readonly></textarea>
+    <br><br>
+    <button onclick="copyToken()">Copy Token</button>
+
+    <script>
+        // Получаем токен из URL
+        const urlParams = new URLSearchParams(window.location.hash.substring(1));
+        const token = urlParams.get('access_token');
+        const tokenType = urlParams.get('token_type');
+        const expiresIn = urlParams.get('expires_in');
+
+        // Выводим токен на страницу
+        if (token) {
+            document.getElementById('token').value = `Token: ${token}\nType: ${tokenType}\nExpires In: ${expiresIn}`;
+        } else {
+            document.getElementById('token').value = 'No token provided!';
+        }
+
+        // Копирование токена
+        function copyToken() {
+            const textarea = document.getElementById('token');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Token copied to clipboard!');
+        }
+    </script>
 </body>
 </html>
