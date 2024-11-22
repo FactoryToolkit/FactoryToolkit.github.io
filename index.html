@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Token</title>
+    <title>Копирование токена</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,7 +90,7 @@
     <div class="container">
         <div id="error" class="error" style="display: none;">Token not found!</div>
         <input id="token" type="text" readonly value="**********">
-        <button onclick="copyToken()">Copy Token</button>
+        <button onclick="copyToken()">Скопировать токен</button>
     </div>
 
     <script>
@@ -110,10 +110,10 @@
         function copyToken() {
             if (token) {
                 navigator.clipboard.writeText(token)
-                    .then(() => alert('Token copied to clipboard!'))
-                    .catch(() => alert('Failed to copy token!'));
+                    .then(() => alert('Токен скопирован! Нажмите CTRL+V, чтобы вставить'))
+                    .catch(() => alert('Не удалось скопировать токен!'));
             } else {
-                alert('No token to copy!');
+                alert('Не удалось скопировать токен!');
             }
         }
     </script>
