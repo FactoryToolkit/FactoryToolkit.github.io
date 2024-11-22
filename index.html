@@ -13,18 +13,19 @@
             height: 100vh;
             margin: 0;
             background-color: #f9f9f9;
+            overflow: hidden;
         }
         .container {
             text-align: center;
             background: white;
-            padding: 20px;
+            padding: 30px 20px; /* Уменьшение боковых отступов для меньших устройств */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 400px;
+            width: 95%;
+            max-width: 450px;
         }
         input {
-            width: 100%;
+            width: calc(100% - 20px); /* Учитываем padding контейнера */
             padding: 15px;
             font-size: 18px;
             text-align: center;
@@ -32,6 +33,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             outline: none;
+            box-sizing: border-box; /* Поле ввода полностью внутри рамки */
+        }
+        .error {
+            color: red;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
         button {
             width: 100%;
@@ -47,14 +54,33 @@
             background-color: #45a049;
         }
 
-        /* Адаптация для маленьких экранов */
-        @media (max-width: 480px) {
+        /* Адаптация для планшетов */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 350px;
+            }
             input {
                 font-size: 16px;
-                padding: 10px;
+                padding: 12px;
             }
             button {
                 font-size: 16px;
+                padding: 12px;
+            }
+        }
+
+        /* Адаптация для телефонов */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 300px;
+                padding: 20px;
+            }
+            input {
+                font-size: 14px;
+                padding: 10px;
+            }
+            button {
+                font-size: 14px;
                 padding: 10px;
             }
         }
@@ -62,8 +88,8 @@
 </head>
 <body>
     <div class="container">
-        <input id="token" type="password" readonly>
-        <br>
+        <div id="error" class="error" style="display: none;">Token not found!</div>
+        <input id="token" type="text" readonly value="**********">
         <button onclick="copyToken()">Copy Token</button>
     </div>
 
@@ -72,21 +98,23 @@
         const urlParams = new URLSearchParams(window.location.hash.substring(1));
         const token = urlParams.get('access_token');
 
-        // Выводим токен в скрытое поле
+        // Если токен найден, отображаем звёздочки, иначе показываем ошибку
         if (token) {
-            document.getElementById('token').value = token;
+            document.getElementById('token').value = '**********';
         } else {
-            document.getElementById('token').value = 'Token not found!';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('token').style.display = 'none';
         }
 
         // Функция копирования токена
         function copyToken() {
-            const input = document.getElementById('token');
-            input.type = 'text'; // Временно показываем токен
-            input.select();
-            document.execCommand('copy');
-            input.type = 'password'; // Снова скрываем токен
-            alert('Token copied to clipboard!');
+            if (token) {
+                navigator.clipboard.writeText(token)
+                    .then(() => alert('Token copied to clipboard!'))
+                    .catch(() => alert('Failed to copy token!'));
+            } else {
+                alert('No token to copy!');
+            }
         }
     </script>
 </body>
